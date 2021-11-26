@@ -1,0 +1,59 @@
+name: Build a container image and push to AWS ECR
+
+on:
+  workflow_call:
+    inputs:
+      SERVICE_NAME:
+        required: true
+        type: string
+      STAGE:
+        required: true
+        type: string
+      DOCKERFILE:
+        required: true
+        type: string
+    outputs:
+      IMAGE_URI:
+        description: "Docker Image URI"
+        value: ${{ jobs.build.outputs.IMAGE_URI }}
+
+jobs:
+  build:
+    name: Build and push
+    runs-on: ubuntu-latest 
+    steps:
+    - name: Set AWS Access Keys and ECR account
+      if: ${{ inputs.STAGE == 'sandbox' }}
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.TESTBED_AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.TESTBED_AWS_SECRET_ACCESS_KEY }}
+
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        repository: nurigo/${{ inputs.SERVICE_NAME }}
+        token: ${{ secrets.GIT_ACCESS_TOKEN }}
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ap-northeast-2
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+    - name: Build, tag, and push the image to Amazon ECR
+      id: build-image
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY: ${{ env.SERVICE_NAME }}
+        IMAGE_TAG: ${{ env.STAGE }}-${{ github.run_id }}
+      run: |
+        # Build a docker container and push it to ECR 
+        docker build -f $DOCKERFILE -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+        echo "Pushing image to ECR..."
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        echo "::set-output name=IMAGE_URI::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
