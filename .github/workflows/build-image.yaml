@@ -62,3 +62,6 @@ jobs:
         echo "Pushing image to ECR..."
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         echo "::set-output name=IMAGE_URI::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+      - name: Debug
+        run: |
+        echo "Image URI is ${{ steps.build-image.outputs.IMAGE_URI }}"
