@@ -12,6 +12,10 @@ on:
       IMAGE_URI:
         required: true
         type: string
+    secrets:
+      token:
+        required: true
+      
 
 jobs:
   build:
@@ -21,24 +25,24 @@ jobs:
     - name: Update manifest
       uses: actions/checkout@v2
       with:
-        repository: nurigo/${{ env.STAGE }}-manifest
-        path: ${{ env.STAGE }}-manifest
-        token: ${{ secrets.GIT_ACCESS_TOKEN }}
+        repository: nurigo/${{ inputs.STAGE }}-manifest
+        path: ${{ inputs.STAGE }}-manifest
+        token: ${{ secrets.token }}
 
     - name: Setup Kustomize
       uses: imranismail/setup-kustomize@v1
 
     - name: Kustomize set image
-      working-directory: ./${{ env.STAGE }}-manifest/templates/${{ env.SERVICE_NAME }}/overlays/${{ env.STAGE }}
+      working-directory: ./${{ inputs.STAGE }}-manifest/templates/${{ inputs.SERVICE_NAME }}/overlays/${{ inputs.STAGE }}
       run: |
         kustomize edit set image IMAGE_NAME=${{ inputs.IMAGE_URI }}
 
     - name: Kustomize build and commit yamls
-      working-directory: ./${{ env.STAGE }}-manifest
+      working-directory: ./${{ inputs.STAGE }}-manifest
       run: |
-        kustomize build templates/${{ env.SERVICE_NAME }}/overlays/${{ env.STAGE }} > ${{ env.STAGE }}/${{ env.SERVICE_NAME }}.yaml
+        kustomize build templates/${{ inputs.SERVICE_NAME }}/overlays/${{ inputs.STAGE }} > ${{ inputs.STAGE }}/${{ inputs.SERVICE_NAME }}.yaml
         git config --global user.email "wiley@nurigo.net"
         git config --global user.name "Github Actions"
-        git add ${{ env.STAGE }}
-        git commit -m "Update ${{ env.SERVICE_NAME }} image tag to ${{ env.STAGE }}-${{ github.run_id }}"
+        git add ${{ inputs.STAGE }}
+        git commit -m "Update ${{ inputs.SERVICE_NAME }} image tag to ${{ inputs.STAGE }}-${{ github.run_id }}"
         git push
