@@ -9,9 +9,6 @@ on:
       STAGE:
         required: true
         type: string
-      IMAGE_URI:
-        required: true
-        type: string
     secrets:
       token:
         required: true
@@ -29,14 +26,28 @@ jobs:
         path: ${{ inputs.STAGE }}-manifest
         token: ${{ secrets.token }}
 
+    - name: Download Image URI
+      id: download-image-uri
+      uses: actions/download-artifact@v2
+      with:
+        name: Image-URI
+
+    - name: Read Image URI
+      id: read-image-uri
+      uses: juliangruber/read-file-action@v1
+      with:
+        path: ./DockerImageURI.txt
+
     - name: Setup Kustomize
       uses: imranismail/setup-kustomize@v1
 
     - name: Kustomize set image
+      env:
+        IMAGE_URI: ${{ steps.read-image-uri.outputs.content }}
       working-directory: ./${{ inputs.STAGE }}-manifest/templates/${{ inputs.SERVICE_NAME }}/overlays/${{ inputs.STAGE }}
       run: |
         echo "Image Uri: ${{ inputs.IMAGE_URI }}"
-        kustomize edit set image IMAGE_NAME=${{ inputs.IMAGE_URI }}
+        kustomize edit set image IMAGE_NAME=${{ env.IMAGE_URI }}
 
     - name: Kustomize build and commit yamls
       working-directory: ./${{ inputs.STAGE }}-manifest
