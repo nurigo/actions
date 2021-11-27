@@ -12,7 +12,6 @@ on:
     secrets:
       token:
         required: true
-      
 
 jobs:
   build:
@@ -46,7 +45,7 @@ jobs:
         IMAGE_URI: ${{ steps.read-image-uri.outputs.content }}
       working-directory: ./${{ inputs.STAGE }}-manifest/templates/${{ inputs.SERVICE_NAME }}/overlays/${{ inputs.STAGE }}
       run: |
-        echo "Image Uri: ${{ inputs.IMAGE_URI }}"
+        echo "Image Uri: ${{ env.IMAGE_URI }}"
         kustomize edit set image IMAGE_NAME=${{ env.IMAGE_URI }}
 
     - name: Kustomize build and commit yamls
