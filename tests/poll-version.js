@@ -29,7 +29,7 @@ describe('poll', () => {
     while (!passed) {
       passed = await checkVersion()
       console.log('passed:', passed)
-      await new Promise(resolve => setTimeout(resolve, 1000))
+      await new Promise(resolve => setTimeout(resolve, 10000))
     }
-  }).timeout(10000)
+  }).timeout(600000)
 })
