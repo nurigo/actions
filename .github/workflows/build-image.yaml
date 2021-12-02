@@ -81,6 +81,7 @@ jobs:
         echo "${{ env.BUILD_VERSION }}" > build-version
         git config --global user.email "wiley@nurigo.net"
         git config --global user.name "Github Actions"
+        git pull
         git add build-version
         git commit -m "Update build-version ${{ inputs.SERVICE_NAME }} ${{ inputs.STAGE }}"
         git push
