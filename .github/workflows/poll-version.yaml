@@ -1,0 +1,26 @@
+name: Polling build version
+
+on:
+  workflow_call:
+    inputs:
+      API_URI:
+        required: true
+        type: string
+      API_HEADERS:
+        required: false
+        type: string
+
+jobs:
+  build:
+    name: Poll and check
+    runs-on: ubuntu-latest 
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v2
+      with:
+        node-version: '16.13.0'
+    - run: yarn install
+    - run: yarn poll-version
+      env:
+        API_URI: ${{ inputs.API_URI }}
+        API_HEADERS: ${{ inputs.API_HEADERS }}

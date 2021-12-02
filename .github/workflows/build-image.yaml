@@ -65,11 +65,22 @@ jobs:
 
     - name: Debug
       run: |
-        echo "${{ steps.build-image.outputs.IMAGE_URI }}" > DockerImageURI.txt
+        echo "${{ steps.build-image.outputs.IMAGE_URI }}" > ${{ inputs.SERVICE_NAME }}-${{ inputs.STAGE }}-DockerImageURI.txt
         echo "Image URI is ${{ steps.build-image.outputs.IMAGE_URI }}"
 
     - name: Store Image URI
       uses: actions/upload-artifact@v2
       with:
         name: Image-URI
-        path: DockerImageURI.txt
+        path: ${{ inputs.SERVICE_NAME }}-${{ inputs.STAGE }}-DockerImageURI.txt
+
+    - name: Commit yamls
+      env:
+        BUILD_VERSION: ${{ inputs.STAGE }}-${{ github.run_id }}
+      run: |
+        echo "${{ env.BUILD_VERSION }}" > build-version
+        git config --global user.email "wiley@nurigo.net"
+        git config --global user.name "Github Actions"
+        git add build-version
+        git commit -m "Update build-version ${{ inputs.SERVICE_NAME }} ${{ inputs.STAGE }}"
+        git push
