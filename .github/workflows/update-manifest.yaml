@@ -9,6 +9,9 @@ on:
       STAGE:
         required: true
         type: string
+      VERSION:
+        required: true
+        type: string
     secrets:
       token:
         required: true
@@ -43,7 +46,7 @@ jobs:
     - name: Kustomize set image
       env:
         IMAGE_URI: ${{ steps.read-image-uri.outputs.content }}
-      working-directory: ./${{ inputs.STAGE }}-manifest/templates/${{ inputs.SERVICE_NAME }}/overlays/${{ inputs.STAGE }}
+      working-directory: ./${{ inputs.STAGE }}-manifest/templates/${{ inputs.SERVICE_NAME }}/${{ inputs.VERSION }}
       run: |
         echo "Image Uri: ${{ env.IMAGE_URI }}"
         kustomize edit set image IMAGE_NAME=${{ env.IMAGE_URI }}
@@ -51,7 +54,7 @@ jobs:
     - name: Kustomize build and commit yamls
       working-directory: ./${{ inputs.STAGE }}-manifest
       run: |
-        kustomize build templates/${{ inputs.SERVICE_NAME }}/overlays/${{ inputs.STAGE }} > ${{ inputs.STAGE }}/${{ inputs.SERVICE_NAME }}.yaml
+        kustomize build templates/${{ inputs.SERVICE_NAME }}/${{ inputs.VERSION }} > ${{ inputs.STAGE }}/${{ inputs.SERVICE_NAME }}.yaml
         git config --global user.email "wiley@nurigo.net"
         git config --global user.name "Github Actions"
         git add ${{ inputs.STAGE }}
