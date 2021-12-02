@@ -49,12 +49,12 @@ jobs:
       working-directory: ./${{ inputs.STAGE }}-manifest/templates/${{ inputs.SERVICE_NAME }}/${{ inputs.VERSION }}
       run: |
         echo "Image Uri: ${{ env.IMAGE_URI }}"
-        kustomize edit set image IMAGE_NAME=${{ env.IMAGE_URI }}
+        kustomize edit set image IMAGE_URI=${{ env.IMAGE_URI }}
 
     - name: Kustomize build and commit yamls
       working-directory: ./${{ inputs.STAGE }}-manifest
       run: |
-        kustomize build templates/${{ inputs.SERVICE_NAME }}/${{ inputs.VERSION }} > ${{ inputs.STAGE }}/${{ inputs.SERVICE_NAME }}.yaml
+        kustomize build templates/${{ inputs.SERVICE_NAME }}/${{ inputs.VERSION }} > ${{ inputs.STAGE }}/${{ inputs.SERVICE_NAME }}-${{ inputs.VERSION }}.yaml
         git config --global user.email "wiley@nurigo.net"
         git config --global user.name "Github Actions"
         git add ${{ inputs.STAGE }}
