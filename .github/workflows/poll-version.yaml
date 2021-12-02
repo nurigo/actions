@@ -20,7 +20,7 @@ jobs:
       with:
         node-version: '16.13.0'
     - run: yarn install
-    - run: yarn poll-version
+    - run: yarn run poll-version
       env:
         API_URI: ${{ inputs.API_URI }}
         API_HEADERS: ${{ inputs.API_HEADERS }}
