@@ -3,6 +3,12 @@ name: Polling build version
 on:
   workflow_call:
     inputs:
+      SERVICE_NAME:
+        required: true
+        type: string
+      STAGE:
+        required: false
+        type: string
       API_URI:
         required: true
         type: string
