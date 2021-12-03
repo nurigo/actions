@@ -70,12 +70,17 @@ jobs:
         echo "::set-output name=IMAGE_URI::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
 
     - name: Debug
+      env:
+        BUILD_VERSION: ${{ inputs.STAGE }}-${{ github.run_id }}
       run: |
-        echo "${{ steps.build-image.outputs.IMAGE_URI }}" > ${{ inputs.SERVICE_NAME }}-${{ inputs.STAGE }}-DockerImageURI.txt
+        mkdir artifact
+        echo "${{ steps.build-image.outputs.IMAGE_URI }}" > artifact/${{ inputs.SERVICE_NAME }}-${{ inputs.STAGE }}-DockerImageURI.txt
+        echo "Image URI is ${{ steps.build-image.outputs.IMAGE_URI }}"
+        echo "$BUILD_VERSION" > artifact/${{ inputs.SERVICE_NAME }}-${{ inputs.STAGE }}-BuildVersion.txt
         echo "Image URI is ${{ steps.build-image.outputs.IMAGE_URI }}"
 
     - name: Store Image URI
       uses: actions/upload-artifact@v2
       with:
         name: Image-URI
-        path: ${{ inputs.SERVICE_NAME }}-${{ inputs.STAGE }}-DockerImageURI.txt
+        path: artifact

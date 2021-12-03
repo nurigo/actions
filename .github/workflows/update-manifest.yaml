@@ -38,7 +38,7 @@ jobs:
       id: read-image-uri
       uses: juliangruber/read-file-action@v1
       with:
-        path: ./${{ inputs.SERVICE_NAME }}-${{ inputs.STAGE }}-DockerImageURI.txt
+        path: ./artifact/${{ inputs.SERVICE_NAME }}-${{ inputs.STAGE }}-DockerImageURI.txt
 
     - name: Setup Kustomize
       uses: imranismail/setup-kustomize@v1

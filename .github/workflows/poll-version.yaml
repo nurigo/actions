@@ -15,6 +15,18 @@ jobs:
     name: Poll and check
     runs-on: ubuntu-latest 
     steps:
+    - name: Download Image URI
+      id: download-image-uri
+      uses: actions/download-artifact@v2
+      with:
+        name: Image-URI
+
+    - name: Read Image URI
+      id: read-build-version
+      uses: juliangruber/read-file-action@v1
+      with:
+        path: ./artifact/${{ inputs.SERVICE_NAME }}-${{ inputs.STAGE }}-BuildVersion.txt
+
     - uses: actions/checkout@v2
       with:
         repository: nurigo/actions
@@ -26,6 +38,7 @@ jobs:
       env:
         API_URI: ${{ inputs.API_URI }}
         API_HEADERS: ${{ inputs.API_HEADERS }}
+        TARGET_VERSION: ${{ steps.read-build-version.outputs.content }}
       run: |
         yarn install
         yarn run poll-version
