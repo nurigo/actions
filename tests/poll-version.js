@@ -4,8 +4,8 @@
 const request = require('request-promise')
 
 const checkVersion = async () => {
-  const targetVersion = process.env.TARGET_VERSION
-  const uri = process.env.API_URI
+  const targetVersion = process.env.TARGET_VERSION.trim()
+  const uri = process.env.API_URI.trim()
   const headers = JSON.parse(process.env.API_HEADERS)
   console.log('Target Version: ', targetVersion)
   console.log('API URI: ', uri)
