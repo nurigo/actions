@@ -25,7 +25,7 @@ jobs:
       id: read-build-version
       uses: juliangruber/read-file-action@v1
       with:
-        path: ./artifact/${{ inputs.SERVICE_NAME }}-${{ inputs.STAGE }}-BuildVersion.txt
+        path: ./${{ inputs.SERVICE_NAME }}-${{ inputs.STAGE }}-BuildVersion.txt
 
     - uses: actions/checkout@v2
       with:
