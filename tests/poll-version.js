@@ -7,7 +7,7 @@ const checkVersion = async () => {
   const targetVersion = process.env.TARGET_VERSION.trim()
   const uri = process.env.API_URI.trim()
   const headers = JSON.parse(process.env.API_HEADERS)
-  const accessToken = JSON.parse(process.env.ACCESS_TOKEN)
+  const accessToken = process.env.ACCESS_TOKEN
   console.log('Target Version: ', targetVersion)
   console.log('API URI: ', uri)
   const options = {
