@@ -13,3 +13,4 @@ document/
 /pipelines.js
 .eslintrc.json
 prettier.config.js
+yarn-error.log

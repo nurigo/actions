@@ -1,4 +1,4 @@
-/* global describe, it, beforeEach, after */
+/* global describe, it */
 'use strict'
 
 const request = require('request-promise')
@@ -7,14 +7,18 @@ const checkVersion = async () => {
   const targetVersion = process.env.TARGET_VERSION.trim()
   const uri = process.env.API_URI.trim()
   const headers = JSON.parse(process.env.API_HEADERS)
+  const accessToken = JSON.parse(process.env.ACCESS_TOKEN)
   console.log('Target Version: ', targetVersion)
   console.log('API URI: ', uri)
   const options = {
     method: 'GET',
     uri,
+    headers: {
+      Authorization: `Bearer ${accessToken}`
+    },
     json: true
   }
-  if (headers) options.headers = headers
+  if (headers) Object.assign(options.headers, headers)
   console.log('options:', options)
   const body = await request(options)
   // console.log('body:', body)

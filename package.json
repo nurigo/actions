@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "poll-version": "./node_modules/mocha/bin/mocha tests/poll-version.js --exit"
+    "poll-version": "./node_modules/mocha/bin/mocha tests/poll-version.js --exit",
+    "lint": "standard"
   },
   "repository": {
     "type": "git",
@@ -22,6 +23,7 @@
     "request-promise": "^4.2.6"
   },
   "devDependencies": {
-    "mocha": "^9.1.3"
+    "mocha": "^9.1.3",
+    "standard": "^16.0.4"
   }
 }

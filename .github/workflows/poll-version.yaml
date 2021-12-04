@@ -15,6 +15,9 @@ on:
       API_HEADERS:
         required: false
         type: string
+    secrets:
+      ACCESS_TOKEN:
+        required: true
 
 jobs:
   build:
@@ -45,6 +48,7 @@ jobs:
         API_URI: ${{ inputs.API_URI }}
         API_HEADERS: ${{ inputs.API_HEADERS }}
         TARGET_VERSION: ${{ steps.read-build-version.outputs.content }}
+        ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
       run: |
         yarn install
         yarn run poll-version
