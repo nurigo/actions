@@ -20,10 +20,13 @@ const checkVersion = async () => {
   }
   if (headers) Object.assign(options.headers, headers)
   console.log('options:', options)
-  const body = await request(options)
-  // console.log('body:', body)
-  console.log('build-version:', body.buildVersion)
-  if (body.buildVersion === targetVersion) return true
+  try {
+    const body = await request(options)
+    console.log('build-version:', body.buildVersion)
+    if (body.buildVersion === targetVersion) return true
+  } catch (err) {
+    console.log('err:', err)
+  }
   return false
 }
 
