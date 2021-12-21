@@ -12,6 +12,9 @@ on:
       DOCKERFILE:
         required: true
         type: string
+      REPO_NAME:
+        required: false
+        type: string
     secrets:
       token:
         required: true
@@ -33,9 +36,11 @@ jobs:
       IMAGE_URI: ${{ steps.build-image.outputs.IMAGE_URI }}
     steps:
     - name: Checkout
+      env:
+        REPO_NAME: ${{ inputs.REPO_NAME || inputs.SERVICE_NAME }}
       uses: actions/checkout@v2
       with:
-        repository: nurigo/${{ inputs.SERVICE_NAME }}
+        repository: nurigo/${{ env.REPO_NAME }}
         token: ${{ secrets.token }}
 
     - name: Write build-version
