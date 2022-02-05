@@ -23,7 +23,8 @@ const checkVersion = async () => {
   try {
     const body = await request(options)
     console.log('build-version:', body.buildVersion)
-    if (body.buildVersion === targetVersion) return true
+    if (body.buildVersion && body.buildVersion === targetVersion) return true
+    if (body.value && body.value === targetVersion) return true
   } catch (err) {
     console.log('err:', err)
   }
