@@ -58,5 +58,5 @@ jobs:
         git config --global user.email "wiley@nurigo.net"
         git config --global user.name "Github Actions"
         git add ${{ inputs.STAGE }}
-        git commit -m "Update ${{ inputs.SERVICE_NAME }} image tag to ${{ inputs.STAGE }}-${{ github.run_id }}"
+        git commit -m "Update ${{ inputs.SERVICE_NAME }} image tag to ${{ inputs.STAGE }}-${{ github.run_id }}-${{ github.run_attempt }}"
         git push

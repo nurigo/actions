@@ -45,7 +45,7 @@ jobs:
 
     - name: Write build-version
       env:
-        BUILD_VERSION: ${{ inputs.STAGE }}-${{ github.run_id }}
+        BUILD_VERSION: ${{ inputs.STAGE }}-${{ github.run_id }}-${{ github.run_attempt }}
       run: |
         echo "${{ env.BUILD_VERSION }}" > build-version
 
@@ -65,7 +65,7 @@ jobs:
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: ${{ inputs.SERVICE_NAME }}
-        IMAGE_TAG: ${{ inputs.STAGE }}-${{ github.run_id }}
+        IMAGE_TAG: ${{ inputs.STAGE }}-${{ github.run_id }}-${{ github.run_attempt }}
         DOCKERFILE: ${{ inputs.DOCKERFILE }}
       run: |
         # Build a docker container and push it to ECR 
@@ -76,7 +76,7 @@ jobs:
 
     - name: Debug
       env:
-        BUILD_VERSION: ${{ inputs.STAGE }}-${{ github.run_id }}
+        BUILD_VERSION: ${{ inputs.STAGE }}-${{ github.run_id }}-${{ github.run_attempt }}
       run: |
         mkdir artifact
         echo "${{ steps.build-image.outputs.IMAGE_URI }}" > artifact/${{ inputs.SERVICE_NAME }}-${{ inputs.STAGE }}-DockerImageURI.txt
