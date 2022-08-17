@@ -71,6 +71,6 @@ jobs:
       env:
         SLACK_CHANNEL: #배포
         SLACK_COLOR: ${{ job.status }} # or a specific color like 'good' or '#ff00ff'
-        SLACK_MESSAGE: "${{ inputs.STAGE }} ${{ inputs.SERVICE_NAME }}-${{ inputs.VERSION }} 배포 완료했습니다 :rocket:"
+        SLACK_MESSAGE: "배포 완료했습니다 :rocket:\n플랫폼: ${{ inputs.STAGE }}\n서비스명: ${{ inputs.SERVICE_NAME }}\n버전: ${{ inputs.VERSION }}"
         SLACK_USERNAME: 깃헙
         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
