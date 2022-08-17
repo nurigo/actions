@@ -15,8 +15,6 @@ on:
     secrets:
       token:
         required: true
-      SLACK_WEBHOOK:
-        required: true
 
 jobs:
   build:
@@ -64,11 +62,11 @@ jobs:
         git push
 
     - name: Slack Notification
+      if: ${{ secrets.SLACK_WEBHOOK }}
       uses: rtCamp/action-slack-notify@v2
       env:
         SLACK_CHANNEL: #배포
         SLACK_COLOR: ${{ job.status }} # or a specific color like 'good' or '#ff00ff'
-        SLACK_MESSAGE: '배포 완료했습니다 :rocket:'
-        SLACK_TITLE: 깃헙배포
+        SLACK_MESSAGE: "${{ inputs.STAGE }} ${{ inputs.SERVICE_NAME }}-${{ inputs.VERSION }} 배포 완료했습니다 :rocket:"
         SLACK_USERNAME: 깃헙
         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
