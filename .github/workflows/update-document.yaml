@@ -1,0 +1,58 @@
+name: Build documents and update document repository
+
+on:
+  workflow_call:
+    inputs:
+      SERVICE_NAME:
+        required: true
+        type: string
+      REPO_NAME:
+        required: false
+        type: string
+      DOMAIN:
+        required: false
+        type: string
+      VERSION:
+        required: true
+        type: string
+    secrets:
+      token:
+        required: true
+
+jobs:
+  build:
+    name: Build and push
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      env:
+        REPO_NAME: ${{ inputs.REPO_NAME || inputs.SERVICE_NAME }}
+      uses: actions/checkout@v2
+      with:
+        repository: nurigo/${{ env.REPO_NAME }}
+        token: ${{ secrets.token }}
+
+    - name: Build Documents
+      env:
+        DOMAIN: ${{ inputs.DOMAIN || 'solapi.com' }}
+      run: |
+        yarn add @nurigo/document
+        node ./node_modules/@nurigo/document/bin/create.js
+
+    - name: Checkout Documents
+      uses: actions/checkout@v2
+      with:
+        repository: nurigo/solapi-documents
+        path: solapi-documents
+        token: ${{ secrets.token }}
+
+    - name: Copy Documents
+      working-directory: ./solapi-documents
+      run: |
+        rm -rf ./docs/references/${{ inputs.SERVICE_NAME }}
+        cp -ra ../document/microservices/${{ inputs.SERVICE_NAME }}/user/${{ inputs.SERVICE_NAME }}/${{ inputs.VERSION }} ./docs/references/${{ inputs.SERVICE_NAME }}
+        git config --global user.email "wiley@nurigo.net"
+        git config --global user.name "Github Actions"
+        git add ./docs/references/${{ inputs.SERVICE_NAME }}
+        git commit -m "Update ${{ inputs.SERVICE_NAME }} documents ${{ github.run_id }}-${{ github.run_attempt }}"
+        git push
