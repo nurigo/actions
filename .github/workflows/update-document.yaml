@@ -9,6 +9,9 @@ on:
       REPO_NAME:
         required: false
         type: string
+      PLATFORM_NAME:
+        required: false
+        type: string
       DOMAIN:
         required: false
         type: string
@@ -35,6 +38,7 @@ jobs:
     - name: Build Documents
       env:
         DOMAIN: ${{ inputs.DOMAIN || 'solapi.com' }}
+        PLATFORM_NAME: ${{ inputs.PLATFORM_NAME || 'solapi' }}
       run: |
         yarn add @nurigo/document
         node ./node_modules/@nurigo/document/bin/create.js
