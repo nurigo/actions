@@ -52,6 +52,7 @@ jobs:
 
     - name: Copy Documents
       working-directory: ./solapi-documents
+      continue-on-error: true
       run: |
         rm -rf ./docs/references/${{ inputs.SERVICE_NAME }}
         cp -ra ../document/microservices/${{ inputs.SERVICE_NAME }}/user/${{ inputs.SERVICE_NAME }}/${{ inputs.VERSION }} ./docs/references/${{ inputs.SERVICE_NAME }}
