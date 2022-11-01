@@ -46,12 +46,12 @@ jobs:
     - name: Checkout Documents
       uses: actions/checkout@v2
       with:
-        repository: nurigo/solapi-documents
-        path: solapi-documents
+        repository: nurigo/solapi-developers
+        path: solapi-developers
         token: ${{ secrets.token }}
 
     - name: Copy Documents
-      working-directory: ./solapi-documents
+      working-directory: ./solapi-developers
       continue-on-error: true
       run: |
         rm -rf ./docs/references/${{ inputs.SERVICE_NAME }}
