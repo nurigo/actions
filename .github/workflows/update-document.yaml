@@ -42,7 +42,7 @@ jobs:
         DOMAIN: ${{ inputs.DOMAIN || 'solapi.com' }}
         PLATFORM_NAME: ${{ inputs.PLATFORM_NAME || 'solapi' }}
       run: |
-        yarn add @nurigo/document
+        yarn add --ignore-engine @nurigo/document
         node ./node_modules/@nurigo/document/bin/create.js
 
     - name: Checkout Documents
