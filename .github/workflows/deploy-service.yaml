@@ -85,7 +85,7 @@ jobs:
       env:
         ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         NODE_ENV: development
-        PLATFORM_NAME: ${{ inputs.PLATFORM_NAME }}
+        PLATFORM_NAME: ${{ inputs.STAGE }}
       run: |
         yarn install
         yarn run live-test
