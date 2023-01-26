@@ -35,7 +35,7 @@ on:
       ACCESS_TOKEN:
         required: true
       SLACK_WEBHOOK:
-        required: true
+        required: false
 
     outputs:
       IMAGE_URI:
