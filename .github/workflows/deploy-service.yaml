@@ -15,6 +15,9 @@ on:
       API_URI:
         required: true
         type: string
+      API_HEADERS:
+        required: true
+        type: string
       REPO_NAME:
         required: false
         type: string
