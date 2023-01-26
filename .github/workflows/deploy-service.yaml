@@ -1,0 +1,99 @@
+name: Deploy a microservice
+
+on:
+  workflow_call:
+    inputs:
+      SERVICE_NAME:
+        required: true
+        type: string
+      STAGE:
+        required: true
+        type: string
+      DOCKERFILE:
+        required: true
+        type: string
+      API_URI:
+        required: true
+        type: string
+      REPO_NAME:
+        required: false
+        type: string
+    secrets:
+      token:
+        required: true
+      AWS_ACCESS_KEY_ID:
+        required: true
+      AWS_SECRET_ACCESS_KEY:
+        required: true
+      ACCESS_TOKEN:
+        required: true
+      SLACK_WEBHOOK:
+        required: true
+
+    outputs:
+      IMAGE_URI:
+        description: "Docker Image URI"
+        value: ${{ jobs.build.outputs.IMAGE_URI }}
+
+jobs:
+  build-image:
+    uses: nurigo/actions/.github/workflows/build-image.yaml@main
+    with:
+      SERVICE_NAME: ${{ inputs.SERVICE_NAME }}
+      STAGE: ${{ inputs.STAGE }}
+      DOCKERFILE: ${{ inputs.DOCKERFILE }}
+    secrets:
+      token: ${{ secrets.token }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+  deploy-beta:
+    needs: build-image
+    uses: nurigo/actions/.github/workflows/update-manifest.yaml@main
+    with:
+      SERVICE_NAME: ${{ inputs.SERVICE_NAME }}
+      STAGE: ${{ inputs.STAGE }}
+      VERSION: beta
+    secrets:
+      token: ${{ secrets.token }}
+
+  poll-version:
+    needs: deploy-beta
+    uses: nurigo/actions/.github/workflows/poll-version.yaml@main
+    with:
+      SERVICE_NAME: ${{ inputs.SERVICE_NAME }}
+      STAGE: ${{ inputs.STAGE }}
+      API_URI: ${{ inputs.API_URI }}
+      API_HEADERS: ${{ inputs.API_HEADERS }}
+    secrets:
+      ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+
+  live-test:
+    needs: poll-version
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 18.13.0
+
+    - name: Test
+      env:
+        ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        NODE_ENV: development
+        PLATFORM_NAME: ${{ inputs.PLATFORM_NAME }}
+      run: |
+        yarn install
+        yarn run live-test
+
+  deploy-stable:
+    needs: live-test
+    uses: nurigo/actions/.github/workflows/update-manifest.yaml@main
+    with:
+      SERVICE_NAME: ${{ inputs.SERVICE_NAME }}
+      STAGE: ${{ inputs.STAGE }}
+      VERSION: stable
+    secrets:
+      token: ${{ secrets.token }}
+      SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
