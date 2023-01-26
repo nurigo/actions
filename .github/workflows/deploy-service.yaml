@@ -21,6 +21,10 @@ on:
       REPO_NAME:
         required: false
         type: string
+      LIVE_TEST:
+        required: false
+        type: boolean
+        default: true
     secrets:
       token:
         required: true
@@ -52,6 +56,7 @@ jobs:
 
   deploy-beta:
     needs: build-image
+    if: ${{ inputs.LIVE_TEST != false }}
     uses: nurigo/actions/.github/workflows/update-manifest.yaml@main
     with:
       SERVICE_NAME: ${{ inputs.SERVICE_NAME }}
@@ -62,6 +67,7 @@ jobs:
 
   poll-version:
     needs: deploy-beta
+    if: ${{ inputs.LIVE_TEST != false }}
     uses: nurigo/actions/.github/workflows/poll-version.yaml@main
     with:
       SERVICE_NAME: ${{ inputs.SERVICE_NAME }}
@@ -73,6 +79,7 @@ jobs:
 
   live-test:
     needs: poll-version
+    if: ${{ inputs.LIVE_TEST != false }}
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
