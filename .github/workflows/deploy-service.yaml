@@ -13,10 +13,10 @@ on:
         required: true
         type: string
       API_URI:
-        required: true
+        required: false
         type: string
       API_HEADERS:
-        required: true
+        required: false
         type: string
       REPO_NAME:
         required: false
