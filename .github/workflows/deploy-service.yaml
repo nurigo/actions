@@ -47,6 +47,7 @@ jobs:
     uses: nurigo/actions/.github/workflows/build-image.yaml@main
     with:
       SERVICE_NAME: ${{ inputs.SERVICE_NAME }}
+      REPO_NAME: ${{ inputs.REPO_NAME }}
       STAGE: ${{ inputs.STAGE }}
       DOCKERFILE: ${{ inputs.DOCKERFILE }}
     secrets:
