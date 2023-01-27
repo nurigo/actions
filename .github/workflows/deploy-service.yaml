@@ -99,6 +99,7 @@ jobs:
 
   deploy-stable:
     needs: live-test
+    if: ${{ always() && (needs.live-test.result == 'success' || needs.live-test.result == 'skipped') }}
     uses: nurigo/actions/.github/workflows/update-manifest.yaml@main
     with:
       SERVICE_NAME: ${{ inputs.SERVICE_NAME }}
