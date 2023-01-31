@@ -42,6 +42,8 @@ on:
         description: "Docker Image URI"
         value: ${{ jobs.build.outputs.IMAGE_URI }}
 
+concurrency: ci-${{ github.ref }}
+
 jobs:
   build-image:
     uses: nurigo/actions/.github/workflows/build-image.yaml@main

@@ -15,6 +15,10 @@ on:
       REPO_NAME:
         required: false
         type: string
+      NODE_ENV:
+        required: false
+        type: string
+        default: production
     secrets:
       token:
         required: true
@@ -67,6 +71,9 @@ jobs:
         ECR_REPOSITORY: ${{ inputs.SERVICE_NAME }}
         IMAGE_TAG: ${{ inputs.STAGE }}-${{ github.run_id }}-${{ github.run_attempt }}
         DOCKERFILE: ${{ inputs.DOCKERFILE }}
+        STAGE: ${{ inputs.STAGE }}
+        NODE_ENV: ${{ inputs.NODE_ENV }}
+        SERVICE_NAME: ${{ inputs.SERVICE_NAME }}
       run: |
         # Build a docker container and push it to ECR 
         docker build -f $DOCKERFILE -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
