@@ -6,13 +6,15 @@ ARG SERVICE_NAME
 ARG STAGE
 ARG NODE_ENV
 
+ENV HOME_DIR /opt/${SERVICE_NAME}
+
 # install middlewares
 RUN wget https://github.com/Yelp/dumb-init/releases/download/v1.2.2/dumb-init_1.2.2_amd64.deb
 RUN dpkg -i dumb-init_*.deb
 
 # mkdir app folder
-RUN mkdir -p /opt/${SERVICE_NAME}
-WORKDIR /opt/${SERVICE_NAME}
+RUN mkdir -p ${HOME_DIR}
+WORKDIR ${HOME_DIR}
 
 # set environment variables
 ENV NODE_ENV ${NODE_ENV}
@@ -26,7 +28,7 @@ COPY package.json yarn.lock .npmrc ./
 RUN yarn install --frozen-lockfile
 
 # copy source files
-COPY . /opt/${SERVICE_NAME}
+COPY . ${HOME_DIR}
 
 # for health check
 COPY probe.sh /probe.sh
