@@ -10,8 +10,9 @@ on:
         required: true
         type: string
       DOCKERFILE:
-        required: true
+        required: false
         type: string
+        default: Default-dockerfile
       REPO_NAME:
         required: false
         type: string
@@ -39,19 +40,25 @@ jobs:
     outputs:
       IMAGE_URI: ${{ steps.build-image.outputs.IMAGE_URI }}
     steps:
-    - name: Checkout
+    - name: Checkout Actions
       env:
         REPO_NAME: ${{ inputs.REPO_NAME || inputs.SERVICE_NAME }}
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
+
+    - name: Checkout Source Codes
+      env:
+        REPO_NAME: ${{ inputs.REPO_NAME || inputs.SERVICE_NAME }}
+      uses: actions/checkout@v3
       with:
         repository: nurigo/${{ env.REPO_NAME }}
+        path: dest
         token: ${{ secrets.token }}
 
     - name: Write build-version
       env:
         BUILD_VERSION: ${{ inputs.STAGE }}-${{ github.run_id }}-${{ github.run_attempt }}
       run: |
-        echo "${{ env.BUILD_VERSION }}" > build-version
+        echo "${{ env.BUILD_VERSION }}" > dest/build-version
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
@@ -70,13 +77,13 @@ jobs:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: ${{ inputs.SERVICE_NAME }}
         IMAGE_TAG: ${{ inputs.STAGE }}-${{ github.run_id }}-${{ github.run_attempt }}
-        DOCKERFILE: ${{ inputs.DOCKERFILE }}
+        DOCKERFILE: ${{ inputs.DOCKERFILE == 'Default-dockerfile' && 'Default-dockerfile' || format('dest/{0}', inputs.DOCKERFILE) }}
         STAGE: ${{ inputs.STAGE }}
         NODE_ENV: ${{ inputs.NODE_ENV }}
         SERVICE_NAME: ${{ inputs.SERVICE_NAME }}
       run: |
         # Build a docker container and push it to ECR 
-        docker build -f $DOCKERFILE -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG --build-arg SERVICE_NAME=${{ env.SERVICE_NAME }} --build-arg NODE_ENV=${{ env.NODE_ENV }} --build-arg STAGE=${{ env.STAGE }} .
+        docker build -f $DOCKERFILE -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG --build-arg SERVICE_NAME=${{ env.SERVICE_NAME }} --build-arg NODE_ENV=${{ env.NODE_ENV }} --build-arg STAGE=${{ env.STAGE }} dest
         echo "Pushing image to ECR..."
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         echo "::set-output name=IMAGE_URI::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
