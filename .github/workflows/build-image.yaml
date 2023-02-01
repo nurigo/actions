@@ -83,6 +83,7 @@ jobs:
         SERVICE_NAME: ${{ inputs.SERVICE_NAME }}
       run: |
         # Build a docker container and push it to ECR 
+        cp probe.sh ./dest/probe.sh
         docker build -f $DOCKERFILE -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG --build-arg SERVICE_NAME=${{ env.SERVICE_NAME }} --build-arg NODE_ENV=${{ env.NODE_ENV }} --build-arg STAGE=${{ env.STAGE }} dest
         echo "Pushing image to ECR..."
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
