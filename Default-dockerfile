@@ -1,0 +1,40 @@
+FROM node:18.13.0
+MAINTAINER wiley@nurigo.net
+
+# arguments
+ARG SERVICE_NAME
+ARG STAGE
+ARG NODE_ENV
+
+# install middlewares
+RUN wget https://github.com/Yelp/dumb-init/releases/download/v1.2.2/dumb-init_1.2.2_amd64.deb
+RUN dpkg -i dumb-init_*.deb
+
+# mkdir app folder
+RUN mkdir -p /opt/${SERVICE_NAME}
+WORKDIR /opt/${SERVICE_NAME}
+
+# set environment variables
+ENV NODE_ENV ${NODE_ENV}
+ENV PLATFORM_NAME ${STAGE}
+
+# install modules
+RUN npm install -g --force yarn
+
+# Install app dependencies
+COPY package.json yarn.lock .npmrc ./
+RUN yarn install --frozen-lockfile
+
+# copy source files
+COPY . /opt/${SERVICE_NAME}
+
+# for health check
+COPY probe.sh /probe.sh
+RUN chmod 0755 /probe.sh
+RUN wget https://github.com/grpc-ecosystem/grpc-health-probe/releases/download/v0.4.8/grpc_health_probe-linux-amd64 -O /grpc_health_probe
+RUN chmod 0755 /grpc_health_probe
+
+# execution
+EXPOSE 7001
+ENTRYPOINT ["/usr/bin/dumb-init", "--"]
+CMD ["yarn", "start"]
