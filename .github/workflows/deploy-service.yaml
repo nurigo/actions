@@ -10,8 +10,9 @@ on:
         required: true
         type: string
       DOCKERFILE:
-        required: true
+        required: false
         type: string
+        default: Default-dockerfile
       API_URI:
         required: false
         type: string
