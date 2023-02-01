@@ -41,9 +41,9 @@ jobs:
       IMAGE_URI: ${{ steps.build-image.outputs.IMAGE_URI }}
     steps:
     - name: Checkout Actions
-      env:
-        REPO_NAME: ${{ inputs.REPO_NAME || inputs.SERVICE_NAME }}
       uses: actions/checkout@v3
+      with:
+        repository: nurigo/actions
 
     - name: Checkout Source Codes
       env:
