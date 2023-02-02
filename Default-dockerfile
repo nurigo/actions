@@ -40,4 +40,4 @@ RUN chmod 0755 /grpc_health_probe
 # execution
 EXPOSE 7001
 ENTRYPOINT ["/usr/bin/dumb-init", "--"]
-CMD ["yarn", ${START}]
+CMD exec yarn ${START}
