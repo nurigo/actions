@@ -5,7 +5,6 @@ MAINTAINER wiley@nurigo.net
 ARG SERVICE_NAME
 ARG STAGE
 ARG NODE_ENV
-ARG START
 
 ENV HOME_DIR /opt/${SERVICE_NAME}
 
@@ -40,4 +39,4 @@ RUN chmod 0755 /grpc_health_probe
 # execution
 EXPOSE 7001
 ENTRYPOINT ["/usr/bin/dumb-init", "--"]
-CMD exec yarn ${START}
+CMD ["yarn", "#{START}" ]
