@@ -27,6 +27,8 @@ RUN npm install -g --force yarn
 COPY package.json yarn.lock .npmrc ./
 RUN yarn install --frozen-lockfile
 
+#{GLOBAL_PACKAGES}
+
 # copy source files
 COPY . ${HOME_DIR}
 
