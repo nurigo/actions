@@ -16,9 +16,6 @@ on:
       API_URI:
         required: false
         type: string
-      API_HEADERS:
-        required: false
-        type: string
       REPO_NAME:
         required: false
         type: string
@@ -82,7 +79,7 @@ jobs:
       SERVICE_NAME: ${{ inputs.SERVICE_NAME }}
       STAGE: ${{ inputs.STAGE }}
       API_URI: ${{ inputs.API_URI }}
-      API_HEADERS: ${{ inputs.API_HEADERS }}
+      API_HEADERS: "{ \"x-beta-microservices\": \"${{ inputs.SERVICE_NAME }}-beta\" }"
     secrets:
       ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
 
