@@ -27,10 +27,12 @@ RUN npm install -g --force yarn
 COPY package.json yarn.lock .npmrc ./
 RUN yarn install --frozen-lockfile
 
-#{GLOBAL_PACKAGES}
-
 # copy source files
 COPY . ${HOME_DIR}
+
+#{EXTRA_CMD1}
+#{EXTRA_CMD2}
+#{EXTRA_CMD3}
 
 # for health check
 COPY probe.sh /probe.sh
