@@ -34,6 +34,10 @@ COPY . ${HOME_DIR}
 #{EXTRA_CMD2}
 #{EXTRA_CMD3}
 
+#{EXTRA_ENV1}
+#{EXTRA_ENV2}
+#{EXTRA_ENV3}
+
 # for health check
 COPY probe.sh /probe.sh
 RUN chmod 0755 /probe.sh
