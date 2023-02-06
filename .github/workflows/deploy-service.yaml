@@ -27,6 +27,15 @@ on:
         required: false
         type: string
         default: production
+      EXTRA_ENV1:
+        required: false
+        type: string
+      EXTRA_ENV2:
+        required: false
+        type: string
+      EXTRA_ENV3:
+        required: false
+        type: string
     secrets:
       token:
         required: true
@@ -55,6 +64,9 @@ jobs:
       STAGE: ${{ inputs.STAGE }}
       DOCKERFILE: ${{ inputs.DOCKERFILE }}
       NODE_ENV: ${{ inputs.NODE_ENV }}
+      EXTRA_ENV1: ${{ inputs.EXTRA_ENV1 }}
+      EXTRA_ENV2: ${{ inputs.EXTRA_ENV2 }}
+      EXTRA_ENV3: ${{ inputs.EXTRA_ENV3 }}
     secrets:
       token: ${{ secrets.token }}
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
