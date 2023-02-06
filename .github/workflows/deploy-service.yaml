@@ -26,7 +26,6 @@ on:
       NODE_ENV:
         required: false
         type: string
-        default: production
       START:
         required: false
         type: string
@@ -66,7 +65,7 @@ jobs:
       REPO_NAME: ${{ inputs.REPO_NAME }}
       STAGE: ${{ inputs.STAGE }}
       DOCKERFILE: ${{ inputs.DOCKERFILE }}
-      NODE_ENV: ${{ inputs.NODE_ENV }}
+      NODE_ENV: ${{ (inputs.STAGE == 'testbed' && !inputs.NODE_ENV) && 'development' || (inputs.NODE_ENV && inputs.NODE_ENV || 'production') }}
       START: ${{ inputs.START }}
       DOCKER_EXTRA_CMD1: ${{ inputs.DOCKER_EXTRA_CMD1 }}
       DOCKER_EXTRA_CMD2: ${{ inputs.DOCKER_EXTRA_CMD2 }}
