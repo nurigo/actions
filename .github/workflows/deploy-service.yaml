@@ -67,6 +67,7 @@ jobs:
       STAGE: ${{ inputs.STAGE }}
       DOCKERFILE: ${{ inputs.DOCKERFILE }}
       NODE_ENV: ${{ inputs.NODE_ENV }}
+      START: ${{ inputs.START }}
       DOCKER_EXTRA_CMD1: ${{ inputs.DOCKER_EXTRA_CMD1 }}
       DOCKER_EXTRA_CMD2: ${{ inputs.DOCKER_EXTRA_CMD2 }}
       DOCKER_EXTRA_CMD3: ${{ inputs.DOCKER_EXTRA_CMD3 }}
