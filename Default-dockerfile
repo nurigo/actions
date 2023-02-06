@@ -34,9 +34,9 @@ COPY . ${HOME_DIR}
 #{EXTRA_CMD2}
 #{EXTRA_CMD3}
 
-#{EXTRA_ENV1}
-#{EXTRA_ENV2}
-#{EXTRA_ENV3}
+#{DOCKER_EXTRA_CMD1}
+#{DOCKER_EXTRA_CMD2}
+#{DOCKER_EXTRA_CMD3}
 
 # for health check
 COPY probe.sh /probe.sh

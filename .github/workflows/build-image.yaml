@@ -20,13 +20,13 @@ on:
         required: false
         type: string
         default: production
-      EXTRA_ENV1:
+      DOCKER_EXTRA_CMD1:
         required: false
         type: string
-      EXTRA_ENV2:
+      DOCKER_EXTRA_CMD2:
         required: false
         type: string
-      EXTRA_ENV3:
+      DOCKER_EXTRA_CMD3:
         required: false
         type: string
     secrets:
@@ -94,18 +94,18 @@ jobs:
         EXTRA_CMD1: ${{ inputs.STAGE == 'testbed' && 'RUN yarn global add pm2' || '# NON EXTRA_CMD1' }}
         EXTRA_CMD2: ${{ inputs.STAGE == 'testbed' && 'RUN apt-get update' || '# NON EXTRA_CMD2' }}
         EXTRA_CMD3: ${{ inputs.STAGE == 'testbed' && 'RUN apt-get -y install vim' || '# NON EXTRA_CMD3' }}
-        EXTRA_ENV1: ${{ inputs.EXTRA_ENV1 && inputs.EXTRA_ENV1 || '# NON EXTRA_ENV1' }}
-        EXTRA_ENV2: ${{ inputs.EXTRA_ENV2 && inputs.EXTRA_ENV2 || '# NON EXTRA_ENV2' }}
-        EXTRA_ENV3: ${{ inputs.EXTRA_ENV3 && inputs.EXTRA_ENV3 || '# NON EXTRA_ENV3' }}
+        DOCKER_EXTRA_CMD1: ${{ inputs.DOCKER_EXTRA_CMD1 && inputs.DOCKER_EXTRA_CMD1 || '# NON DOCKER_EXTRA_CMD1' }}
+        DOCKER_EXTRA_CMD2: ${{ inputs.DOCKER_EXTRA_CMD2 && inputs.DOCKER_EXTRA_CMD2 || '# NON DOCKER_EXTRA_CMD2' }}
+        DOCKER_EXTRA_CMD3: ${{ inputs.DOCKER_EXTRA_CMD3 && inputs.DOCKER_EXTRA_CMD3 || '# NON DOCKER_EXTRA_CMD3' }}
       run: |
         # Build a docker container and push it to ECR 
         sed -i "s/#{START}/${{ env.START }}/g" ${{ env.DOCKERFILE }}
         sed -i "s/#{EXTRA_CMD1}/${{ env.EXTRA_CMD1 }}/g" ${{ env.DOCKERFILE }}
         sed -i "s/#{EXTRA_CMD2}/${{ env.EXTRA_CMD2 }}/g" ${{ env.DOCKERFILE }}
         sed -i "s/#{EXTRA_CMD3}/${{ env.EXTRA_CMD3 }}/g" ${{ env.DOCKERFILE }}
-        sed -i "s/#{EXTRA_ENV1}/${{ env.EXTRA_ENV1 }}/g" ${{ env.DOCKERFILE }}
-        sed -i "s/#{EXTRA_ENV2}/${{ env.EXTRA_ENV2 }}/g" ${{ env.DOCKERFILE }}
-        sed -i "s/#{EXTRA_ENV3}/${{ env.EXTRA_ENV3 }}/g" ${{ env.DOCKERFILE }}
+        sed -i "s/#{DOCKER_EXTRA_CMD1}/${{ env.DOCKER_EXTRA_CMD1 }}/g" ${{ env.DOCKERFILE }}
+        sed -i "s/#{DOCKER_EXTRA_CMD2}/${{ env.DOCKER_EXTRA_CMD2 }}/g" ${{ env.DOCKERFILE }}
+        sed -i "s/#{DOCKER_EXTRA_CMD3}/${{ env.DOCKER_EXTRA_CMD3 }}/g" ${{ env.DOCKERFILE }}
         cp probe.sh ./dest/probe.sh
         docker build -f $DOCKERFILE -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG --build-arg SERVICE_NAME=${{ env.SERVICE_NAME }} --build-arg NODE_ENV=${{ env.NODE_ENV }} --build-arg STAGE=${{ env.STAGE }} --build-arg START=${{ env.START }} dest
         echo "Pushing image to ECR..."

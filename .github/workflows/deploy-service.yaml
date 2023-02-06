@@ -27,13 +27,13 @@ on:
         required: false
         type: string
         default: production
-      EXTRA_ENV1:
+      DOCKER_EXTRA_CMD1:
         required: false
         type: string
-      EXTRA_ENV2:
+      DOCKER_EXTRA_CMD2:
         required: false
         type: string
-      EXTRA_ENV3:
+      DOCKER_EXTRA_CMD3:
         required: false
         type: string
     secrets:
