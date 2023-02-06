@@ -30,7 +30,6 @@ on:
       START:
         required: false
         type: string
-        default: start
       DOCKER_EXTRA_CMD1:
         required: false
         type: string
