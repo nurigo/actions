@@ -29,6 +29,10 @@ on:
       START:
         required: false
         type: string
+      VERSION:
+        required: false
+        type: string
+        default: stable
       DOCKER_EXTRA_CMD1:
         required: false
         type: string
@@ -125,7 +129,7 @@ jobs:
     with:
       SERVICE_NAME: ${{ inputs.SERVICE_NAME }}
       STAGE: ${{ inputs.STAGE }}
-      VERSION: stable
+      VERSION: ${{ inputs.VERSION }}
     secrets:
       token: ${{ secrets.token }}
       SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
