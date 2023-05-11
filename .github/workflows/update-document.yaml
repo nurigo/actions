@@ -29,6 +29,10 @@ jobs:
     name: Build and push
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 18.13.0
+
     - name: Checkout
       env:
         REPO_NAME: ${{ inputs.REPO_NAME || inputs.SERVICE_NAME }}
