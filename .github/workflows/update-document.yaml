@@ -43,6 +43,7 @@ jobs:
         PLATFORM_NAME: ${{ inputs.PLATFORM_NAME || 'solapi' }}
       run: |
         yarn add --ignore-engines @nurigo/document
+        yarn install
         yarn build || true
         node ./node_modules/@nurigo/document/bin/create.js
 
