@@ -39,7 +39,7 @@ COPY . ${HOME_DIR}
 #{DOCKER_EXTRA_CMD3}
 
 # set custom env
-ENV ${CUSTOM_ENV_NAME1} ${CUSTOM_ENV_VALUE1}
+# ENV ${CUSTOM_ENV_NAME1} ${CUSTOM_ENV_VALUE1}
 
 # for health check
 COPY probe.sh /probe.sh
