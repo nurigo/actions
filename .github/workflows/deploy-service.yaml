@@ -42,12 +42,12 @@ on:
       DOCKER_EXTRA_CMD3:
         required: false
         type: string
-      USE_MONGO:
+      CUSTOM_ENV_NAME_1:
         required: false
-        type: boolean
-      USE_REDIS:
+        type: string
+      CUSTOM_ENV_VALUE_1:
         required: false
-        type: boolean
+        type: string
     secrets:
       token:
         required: true
@@ -136,8 +136,8 @@ jobs:
       SERVICE_NAME: ${{ inputs.SERVICE_NAME }}
       STAGE: ${{ inputs.STAGE }}
       VERSION: ${{ inputs.VERSION }}
-      USE_MONGO: ${{ inputs.USE_MONGO }}
-      USE_REDIS: ${{ inputs.USE_REDIS }}
+      CUSTOM_ENV_NAME_1: ${{ inputs.CUSTOM_ENV_NAME_1 }}
+      CUSTOM_ENV_VALUE_1: ${{ inputs.CUSTOM_ENV_VALUE_1 }}
     secrets:
       token: ${{ secrets.token }}
       SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
