@@ -42,10 +42,10 @@ on:
       DOCKER_EXTRA_CMD3:
         required: false
         type: string
-      CUSTOM_ENV_NAME_1:
+      CUSTOM_ENV_NAME1:
         required: false
         type: string
-      CUSTOM_ENV_VALUE_1:
+      CUSTOM_ENV_VALUE1:
         required: false
         type: string
     secrets:
@@ -136,8 +136,8 @@ jobs:
       SERVICE_NAME: ${{ inputs.SERVICE_NAME }}
       STAGE: ${{ inputs.STAGE }}
       VERSION: ${{ inputs.VERSION }}
-      CUSTOM_ENV_NAME_1: ${{ inputs.CUSTOM_ENV_NAME_1 }}
-      CUSTOM_ENV_VALUE_1: ${{ inputs.CUSTOM_ENV_VALUE_1 }}
+      CUSTOM_ENV_NAME1: ${{ inputs.CUSTOM_ENV_NAME1 }}
+      CUSTOM_ENV_VALUE1: ${{ inputs.CUSTOM_ENV_VALUE1 }}
     secrets:
       token: ${{ secrets.token }}
       SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}

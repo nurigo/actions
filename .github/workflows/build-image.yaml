@@ -32,10 +32,10 @@ on:
       DOCKER_EXTRA_CMD3:
         required: false
         type: string
-      CUSTOM_ENV_NAME_1:
+      CUSTOM_ENV_NAME1:
         required: false
         type: string
-      CUSTOM_ENV_VALUE_1:
+      CUSTOM_ENV_VALUE1:
         required: false
         type: string
     secrets:
@@ -99,8 +99,8 @@ jobs:
         STAGE: ${{ inputs.STAGE }}
         NODE_ENV: ${{ inputs.NODE_ENV }}
         SERVICE_NAME: ${{ inputs.SERVICE_NAME }}
-        CUSTOM_ENV_NAME_1: ${{ inputs.CUSTOM_ENV_NAME_1 }}
-        CUSTOM_ENV_VALUE_1: ${{ inputs.CUSTOM_ENV_VALUE_1 }}
+        CUSTOM_ENV_NAME1: ${{ inputs.CUSTOM_ENV_NAME1 }}
+        CUSTOM_ENV_VALUE1: ${{ inputs.CUSTOM_ENV_VALUE1 }}
         START: ${{ inputs.START && inputs.START || (inputs.NODE_ENV == 'development' && 'start-dev' || 'start') }}
         EXTRA_CMD1: ${{ inputs.STAGE == 'testbed' && 'RUN yarn global add pm2' || '# NON EXTRA_CMD1' }}
         EXTRA_CMD2: ${{ inputs.STAGE == 'testbed' && 'RUN apt-get update' || '# NON EXTRA_CMD2' }}
