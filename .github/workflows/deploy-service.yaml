@@ -9,12 +9,6 @@ on:
       STAGE:
         required: true
         type: string
-      CUSTOM_ENV_NAME1:
-        required: false
-        type: string
-      CUSTOM_ENV_VALUE1:
-        required: false
-        type: string
       DOCKERFILE:
         required: false
         type: string
@@ -89,8 +83,6 @@ jobs:
       DOCKER_EXTRA_CMD3: ${{ inputs.DOCKER_EXTRA_CMD3 }}
       DOCKER_EXTRA_CMD4: ${{ inputs.DOCKER_EXTRA_CMD4 }}
       DOCKER_EXTRA_CMD5: ${{ inputs.DOCKER_EXTRA_CMD5 }}
-      CUSTOM_ENV_NAME1: ${{ inputs.CUSTOM_ENV_NAME1 }}
-      CUSTOM_ENV_VALUE1: ${{ inputs.CUSTOM_ENV_VALUE1 }}
     secrets:
       token: ${{ secrets.token }}
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
