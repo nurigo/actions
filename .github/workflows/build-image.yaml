@@ -128,6 +128,8 @@ jobs:
         sed -i "s/#{DOCKER_EXTRA_CMD3}/${{ env.DOCKER_EXTRA_CMD3 }}/g" ${{ env.DOCKERFILE }}
         sed -i "s/#{DOCKER_EXTRA_CMD4}/${{ env.DOCKER_EXTRA_CMD4 }}/g" ${{ env.DOCKERFILE }}
         sed -i "s/#{DOCKER_EXTRA_CMD5}/${{ env.DOCKER_EXTRA_CMD5 }}/g" ${{ env.DOCKERFILE }}
+        sed -i "s/#{CUSTOM_ENV_NAME1}/${{ env.CUSTOM_ENV_NAME1 }}/g" ${{ env.DOCKERFILE }}
+        sed -i "s/#{CUSTOM_ENV_VALUE1}/${{ env.CUSTOM_ENV_VALUE1 }}/g" ${{ env.DOCKERFILE }}
         cp probe.sh ./dest/probe.sh
         docker build -f $DOCKERFILE -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG --build-arg SERVICE_NAME=${{ env.SERVICE_NAME }} --build-arg NODE_ENV=${{ env.NODE_ENV }} --build-arg STAGE=${{ env.STAGE }} --build-arg START=${{ env.START }} dest
         echo "Pushing image to ECR..."
