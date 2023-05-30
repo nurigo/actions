@@ -117,8 +117,6 @@ jobs:
         DOCKER_EXTRA_CMD3: ${{ inputs.DOCKER_EXTRA_CMD3 && inputs.DOCKER_EXTRA_CMD3 || '# NON DOCKER_EXTRA_CMD3' }}
         DOCKER_EXTRA_CMD4: ${{ inputs.DOCKER_EXTRA_CMD4 && inputs.DOCKER_EXTRA_CMD4 || '# NON DOCKER_EXTRA_CMD4' }}
         DOCKER_EXTRA_CMD5: ${{ inputs.DOCKER_EXTRA_CMD5 && inputs.DOCKER_EXTRA_CMD5 || '# NON DOCKER_EXTRA_CMD5' }}
-        CUSTOM_ENV_NAME1: ${{ inputs.CUSTOM_ENV_NAME1 }}
-        CUSTOM_ENV_VALUE1: ${{ inputs.CUSTOM_ENV_VALUE1 }}
       run: |
         # Build a docker container and push it to ECR 
         sed -i "s/#{START}/${{ env.START }}/g" ${{ env.DOCKERFILE }}
