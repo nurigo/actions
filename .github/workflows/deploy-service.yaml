@@ -58,6 +58,10 @@ on:
         required: true
       ACCESS_TOKEN:
         required: true
+      API_KEY:
+        required: false
+      API_SECRET:
+        required: false
       SLACK_WEBHOOK:
         required: false
 
@@ -125,6 +129,8 @@ jobs:
     - name: Test
       env:
         ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        API_KEY: ${{ secrets.API_KEY }}
+        API_SECRET: ${{ secrets.API_SECRET }}
         NODE_ENV: development
         PLATFORM_NAME: ${{ inputs.STAGE }}
       run: |
