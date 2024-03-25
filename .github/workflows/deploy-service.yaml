@@ -23,6 +23,10 @@ on:
         required: false
         type: boolean
         default: true
+      BETA_DEPLOY_ONLY:
+        required: false
+        type: boolean
+        default: false
       NODE_ENV:
         required: false
         type: string
@@ -94,7 +98,7 @@ jobs:
 
   deploy-beta:
     needs: build-image
-    if: ${{ inputs.LIVE_TEST != false }}
+    if: ${{ inputs.LIVE_TEST != false  || inputs.BETA_DEPLOY_ONLY == true }}
     uses: nurigo/actions/.github/workflows/update-manifest.yaml@main
     with:
       SERVICE_NAME: ${{ inputs.SERVICE_NAME }}
@@ -105,7 +109,7 @@ jobs:
 
   poll-version:
     needs: deploy-beta
-    if: ${{ inputs.LIVE_TEST != false }}
+    if: ${{ inputs.LIVE_TEST != false && inputs.BETA_DEPLOY_ONLY == false }}
     uses: nurigo/actions/.github/workflows/poll-version.yaml@main
     with:
       SERVICE_NAME: ${{ inputs.SERVICE_NAME }}
@@ -117,7 +121,7 @@ jobs:
 
   live-test:
     needs: poll-version
-    if: ${{ inputs.LIVE_TEST != false }}
+    if: ${{ inputs.LIVE_TEST != false && inputs.BETA_DEPLOY_ONLY == false }}
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
@@ -139,7 +143,7 @@ jobs:
 
   deploy-stable:
     needs: live-test
-    if: ${{ always() && (needs.live-test.result == 'success' || (inputs.LIVE_TEST == false && needs.build-image.result == 'success')) }}
+    if: ${{ always() && (needs.live-test.result == 'success' || (inputs.LIVE_TEST == false && needs.build-image.result == 'success')) && inputs.BETA_DEPLOY_ONLY == false }}
     uses: nurigo/actions/.github/workflows/update-manifest.yaml@main
     with:
       SERVICE_NAME: ${{ inputs.SERVICE_NAME }}
