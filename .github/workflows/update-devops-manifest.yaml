@@ -70,7 +70,7 @@ jobs:
     - name: Copy yamls and commit
       working-directory: ./devops-private
       run: |
-        cp ../${{ inputs.STAGE }}-manifest/${{ inputs.STAGE }}/${{ inputs.SERVICE }}-${{ inputs.VERSION }}.yaml ./${{ inputs.STAGE }}-manifest/${{ inputs.STAGE }}/${{ inputs.SERVICE }}/${{ inputs.SERVICE }}-${{ inputs.VERSION }}.yaml
+        cp ../${{ inputs.STAGE }}-manifest/${{ inputs.STAGE }}/${{ inputs.SERVICE_NAME }}-${{ inputs.VERSION }}.yaml ./${{ inputs.STAGE }}-manifest/${{ inputs.STAGE }}/${{ inputs.SERVICE_NAME }}/${{ inputs.SERVICE_NAME }}-${{ inputs.VERSION }}.yaml
         git config --global user.email "wiley@nurigo.net"
         git config --global user.name "Github Actions"
         git add ${{ inputs.STAGE }}
