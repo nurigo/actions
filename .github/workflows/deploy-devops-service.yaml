@@ -3,6 +3,9 @@ name: Deploy a microservice
 on:
   workflow_call:
     inputs:
+      APP_NAME:
+        required: false
+        type: string
       SERVICE_NAME:
         required: true
         type: string
@@ -101,6 +104,7 @@ jobs:
     if: ${{ inputs.LIVE_TEST != false  || inputs.BETA_DEPLOY_ONLY == true }}
     uses: nurigo/actions/.github/workflows/update-devops-manifest.yaml@main
     with:
+      APP_NAME: ${{ inputs.APP_NAME }}
       SERVICE_NAME: ${{ inputs.SERVICE_NAME }}
       STAGE: ${{ inputs.STAGE }}
       VERSION: beta
@@ -146,6 +150,7 @@ jobs:
     if: ${{ always() && (needs.live-test.result == 'success' || (inputs.LIVE_TEST == false && needs.build-image.result == 'success')) && inputs.BETA_DEPLOY_ONLY == false }}
     uses: nurigo/actions/.github/workflows/update-devops-manifest.yaml@main
     with:
+      APP_NAME: ${{ inputs.APP_NAME }}
       SERVICE_NAME: ${{ inputs.SERVICE_NAME }}
       STAGE: ${{ inputs.STAGE }}
       VERSION: ${{ inputs.VERSION }}
