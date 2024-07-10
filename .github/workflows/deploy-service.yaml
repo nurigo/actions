@@ -23,6 +23,10 @@ on:
         required: false
         type: boolean
         default: true
+      LIVE_TEST_SCRIPT:
+        required: false
+        type: string
+        default: live-test
       BETA_DEPLOY_ONLY:
         required: false
         type: boolean
@@ -139,7 +143,7 @@ jobs:
         PLATFORM_NAME: ${{ inputs.STAGE }}
       run: |
         yarn install
-        yarn run live-test
+        yarn run ${{ inputs.LIVE_TEST_SCRIPT }}
 
   deploy-stable:
     needs: live-test
