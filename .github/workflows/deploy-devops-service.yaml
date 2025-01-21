@@ -81,7 +81,9 @@ on:
         description: "Docker Image URI"
         value: ${{ jobs.build.outputs.IMAGE_URI }}
 
-concurrency: ci-${{ github.ref }}
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build-image:
