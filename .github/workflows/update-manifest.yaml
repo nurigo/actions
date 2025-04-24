@@ -74,3 +74,62 @@ jobs:
         SLACK_MESSAGE: "배포 완료했습니다 :rocket:\n플랫폼: ${{ inputs.STAGE }}\n서비스명: ${{ inputs.SERVICE_NAME }}\n버전: ${{ inputs.VERSION }}"
         SLACK_USERNAME: 깃헙
         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+
+  build_devops:
+    name: Build and push
+    runs-on: ubuntu-latest
+    env:
+      SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+    steps:
+      - name: Update manifest
+        uses: actions/checkout@v2
+        with:
+          repository: nurigo/devops-private
+          path: devops-private
+          token: ${{ secrets.token }}
+
+      - name: Checkout STAGE manifest
+        uses: actions/checkout@v2
+        with:
+          repository: nurigo/${{ inputs.STAGE }}-manifest
+          path: ${{ inputs.STAGE }}-manifest
+          token: ${{ secrets.token }}
+
+      - name: Download Image URI
+        id: download-image-uri
+        uses: actions/download-artifact@v4
+        with:
+          name: Image-URI
+
+      - name: Read Image URI
+        id: read-image-uri
+        uses: juliangruber/read-file-action@v1
+        with:
+          path: ./${{ inputs.SERVICE_NAME }}-${{ inputs.STAGE }}-DockerImageURI.txt
+
+      - name: Setup Kustomize
+        uses: imranismail/setup-kustomize@v1
+
+      - name: Kustomize set image
+        env:
+          IMAGE_URI: ${{ steps.read-image-uri.outputs.content }}
+        working-directory: ./${{ inputs.STAGE }}-manifest/templates/${{ inputs.SERVICE_NAME }}/${{ inputs.VERSION }}
+        run: |
+          echo "Image Uri: ${{ env.IMAGE_URI }}"
+          kustomize edit set image IMAGE_URI=${{ env.IMAGE_URI }}
+
+      - name: Kustomize build and commit yamls
+        working-directory: ./${{ inputs.STAGE }}-manifest
+        run: |
+          kustomize build templates/${{ inputs.SERVICE_NAME }}/${{ inputs.VERSION }} > ${{ inputs.STAGE }}/${{ inputs.SERVICE_NAME }}-${{ inputs.VERSION }}.yaml
+
+      - name: Copy yamls and commit
+        working-directory: ./devops-private
+        run: |
+          mkdir -p ./${{ inputs.STAGE }}-manifest/${{ inputs.STAGE }}/${{ inputs.APP_NAME || inputs.SERVICE_NAME }}
+          cp ../${{ inputs.STAGE }}-manifest/${{ inputs.STAGE }}/${{ inputs.SERVICE_NAME }}-${{ inputs.VERSION }}.yaml ./${{ inputs.STAGE }}-manifest/${{ inputs.STAGE }}/${{ inputs.APP_NAME || inputs.SERVICE_NAME }}/${{ inputs.SERVICE_NAME }}-${{ inputs.VERSION }}.yaml
+          git config --global user.email "wiley@nurigo.net"
+          git config --global user.name "Github Actions"
+          git add ${{ inputs.STAGE }}-manifest
+          git commit -m "Update ${{ inputs.SERVICE_NAME }} image tag to ${{ inputs.STAGE }}-${{ github.run_id }}-${{ github.run_attempt }}"
+          git push      
