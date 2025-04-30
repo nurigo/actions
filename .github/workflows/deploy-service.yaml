@@ -105,7 +105,7 @@ jobs:
   deploy-beta:
     needs: build-image
     if: ${{ inputs.LIVE_TEST != false  || inputs.BETA_DEPLOY_ONLY == true }}
-    uses: nurigo/actions/.github/workflows/update-manifest.yaml@main
+    uses: nurigo/actions/.github/workflows/update-devops-manifest.yaml@main
     with:
       SERVICE_NAME: ${{ inputs.SERVICE_NAME }}
       STAGE: ${{ inputs.STAGE }}
@@ -150,7 +150,7 @@ jobs:
   deploy-stable:
     needs: live-test
     if: ${{ always() && (needs.live-test.result == 'success' || (inputs.LIVE_TEST == false && needs.build-image.result == 'success')) && inputs.BETA_DEPLOY_ONLY == false }}
-    uses: nurigo/actions/.github/workflows/update-manifest.yaml@main
+    uses: nurigo/actions/.github/workflows/update-devops-manifest.yaml@main
     with:
       SERVICE_NAME: ${{ inputs.SERVICE_NAME }}
       STAGE: ${{ inputs.STAGE }}
